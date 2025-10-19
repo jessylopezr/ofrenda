@@ -1,0 +1,2041 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <title>Ofrenda proyecto final  </title>
+    <link rel="icon" type="image/png" href="./assets/vela.png">
+
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+
+
+<!-- Aquí va todo el código de three.js -->
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script src="./font/papel picado_Regular.js"></script>
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module">  
+//🗃️🗃️ Mandar llamar a la librería
+  import * as THREE from 'three'; 
+    import {OrbitControls} from 'three/OrbitControls';
+    console.log(OrbitControls);
+    import { RoundedBoxGeometry } from './js/RoundedBoxGeometry.js';
+
+    import {TextGeometry} from "./js/TextGeometry.js";
+    import {FontLoader} from "./js/FontLoader.js";
+
+    import pozole1 from "./assets/pozole.js";
+    import jarron from "./assets/Ofrenda.js";
+    import flores from "./assets/flores.js";
+    import cruz1 from "./assets/cruz.js";
+    //import retrato from "./assets/portaretrato.js";
+    import vaso from "./assets/vasos.js";
+    import vela from "./assets/vela.js";
+    import pan from "./assets/pan.js";
+    import calaca from "./assets/calaca.js";
+    import manzana from "./assets/manzana.js";
+    import lapida1 from "./assets/lapida 2.js";
+    import lap from "./assets/lapida1.js";
+    import lip from "./assets/lapida3.js";
+    import flor2 from "./assets/flor2.js";
+    import pollo from "./assets/pollo.js";
+    import tequila from "/assets/tequila.js"
+    import balero from "/assets/balero.js"
+    import caña from "/assets/cañas.js"
+    import naranja from "/assets/naranjas.js"
+    import reilete from "/assets/reilete.js"
+
+//🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), antialias: true,
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000);
+
+
+// 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+
+//🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,0.1,2000
+      );
+    scene.add(camera);
+//Evento para redimencionar el canvas
+//Sizes Objeto donde se toman los tamaños interiores inner de la ventana
+const sizes ={
+    width: window.innerWidth,
+    height: window.innerHeight,
+};
+const  canvas=document.getElementById('myCanvas')
+window.addEventListener('resize', () => {
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(sizes.width, sizes.height);
+});
+
+
+    //Settings de la cámara
+    camera.position.set(0, 50, 300);
+
+
+
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+//fondo
+ var loader = new THREE.TextureLoader();
+ var bgTexture = loader.load("assets/noche.jpg");
+ scene.background = bgTexture;
+// Espacio para colocar los objetos
+    
+//LUCES✨✨
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFShadowMap;
+var light1 = new THREE.DirectionalLight(0xFFFFFF,1);
+light1.position.set(50,50,50);
+light1.target.position.set(0,0,0);
+light1.castShadow=true;
+light1.shadow.bias=0.01;
+light1.shadow.mapSize.width=512*3;
+light1.shadow.mapSize.height=512*3;
+
+light1.shadow.camera.top=65;
+light1.shadow.camera.right=65;
+light1.shadow.camera.left=-85;
+light1.shadow.camera.bottom=-65;
+light1.shadow.camera.visible=true;
+scene.add(light1);
+//luz del point 0x7E8ED6
+
+const luz = new THREE.AmbientLight(0x000000, .5);
+luz.position.set(0, 0, 30);
+scene.add(luz);
+
+//PLANOS
+
+var geometry01 = new THREE.BoxGeometry(150,0.5,100);
+var material01 = new THREE.MeshLambertMaterial({
+color:0x4A1A42, side:THREE.DoubleSide});
+var mesh01 = new THREE.Mesh(geometry01,material01);
+mesh01.receiveShadow = true;
+mesh01.position.set(0,0,20)
+scene.add(mesh01)
+
+var geometry1=new THREE.BoxGeometry(150,0.5,400);
+var material1 = new THREE.MeshLambertMaterial({
+color:0x1F0713, side:THREE.DoubleSide});
+var piso = new THREE.Mesh(geometry1,material1);
+piso.position.set(0,-.5,160)
+scene.add(piso)
+
+var campos=new THREE.BoxGeometry(450,0.5,400);
+var texture=new THREE.TextureLoader().load("assets/pasto_Mesa de trabajo 1.jpg");
+var piso1=new THREE.MeshLambertMaterial({map:texture});
+var campo = new THREE.Mesh(campos,piso1);
+campo.position.set(0,-1,160)
+scene.add(campo)
+
+//PARED 
+    var box = new THREE.BoxGeometry(150,100,5);
+    var paredmat= new THREE.MeshLambertMaterial({color:0xFFFFFF, side:THREE.DoubleSide})
+    var pared = new THREE.Mesh(box,paredmat);
+    pared.receiveShadow = true;
+    scene.add(pared);
+    pared.position.set(0,50,-33);
+//altar
+//Piso 1
+var material2 = new THREE.MeshLambertMaterial({color:0x9E4800, side:THREE.DoubleSide});
+var material3 = new THREE.MeshLambertMaterial({color:0x631053, side:THREE.DoubleSide});
+var material4 = new THREE.MeshLambertMaterial({color:0x0E096E, side:THREE.DoubleSide});
+var material5 = new THREE.MeshLambertMaterial({color:0x000000, side:THREE.DoubleSide});
+var material6 = new THREE.MeshLambertMaterial({color:0x3A0D4A, side:THREE.DoubleSide});
+var material7 = new THREE.MeshLambertMaterial({color:0xFFFFFF, side:THREE.DoubleSide});
+var material8 = new THREE.MeshLambertMaterial({color:0xF5A500, side:THREE.DoubleSide});
+
+var geometry02 = new THREE.BoxGeometry(95,5,60);
+var mesh02 = new THREE.Mesh(geometry02,material2);
+mesh02.receiveShadow = true;
+scene.add(mesh02);
+mesh02.position.set(0,2.5,0);
+
+//Piso 2
+var geometry03 = new THREE.BoxGeometry(80,5,55);
+var mesh03 = new THREE.Mesh(geometry03,material3);  
+mesh03.receiveShadow = true;
+scene.add(mesh03);
+mesh03.position.set(0,7.5,-2.5);
+
+//Piso 3
+var geometry04 = new THREE.BoxGeometry(70,5,45);
+var mesh04 = new THREE.Mesh(geometry04,material4);
+mesh04.receiveShadow = true;
+scene.add(mesh04);
+mesh04.position.set(0,12.5,-7.5);
+//Piso 4
+var geometry05 = new THREE.BoxGeometry(60,5,35);
+var mesh05 = new THREE.Mesh(geometry05,material5);
+mesh05.receiveShadow = true;
+scene.add(mesh05);
+mesh05.position.set(0,17.5,-12.5);
+//Piso 5
+var geometry06 = new THREE.BoxGeometry(50,5,25);
+var mesh06 = new THREE.Mesh(geometry06,material6);
+mesh06.receiveShadow = true;   
+scene.add(mesh06);
+mesh06.position.set(0,22.5,-17.5);
+//Piso 6
+var geometry07 = new THREE.BoxGeometry(40,5,15);
+var mesh07 = new THREE.Mesh(geometry07,material7);
+mesh07.receiveShadow = true;
+scene.add(mesh07);
+mesh07.position.set(0,27.5,-22.5);
+//Piso 7
+var geometry08 = new THREE.BoxGeometry(30,5,10);
+var mesh08 = new THREE.Mesh(geometry08,material8);
+mesh08.receiveShadow = true;
+scene.add(mesh08);
+mesh08.position.set(0,32.5,-25);
+
+//papel picado
+var loader = new FontLoader();
+
+var font =loader.parse(fontJSON3);
+var texto = new TextGeometry('$ : ? # / @ & ',{
+font : font, size: 10, height: .3 });
+
+texto.center();
+var material1 =new THREE.MeshLambertMaterial({
+color:0x10615F, emissive:0x33FFFA, shading:THREE.FlatShading, });
+
+var texto1 = new THREE.Mesh(texto,material1);
+texto1.position.set(0,90,-30)
+
+scene.add(texto1);
+
+// PAPEL PICADO 2 
+var texto2 = new TextGeometry(': ? # / @ & $ ', {
+  font: font, size: 10, height: .3
+});
+texto2.center();
+var material2 = new THREE.MeshLambertMaterial({
+  color: 0xC7AC12, emissive: 0xC7AC12, shading: THREE.FlatShading,
+});
+var textoMesh2 = new THREE.Mesh(texto2, material2);
+textoMesh2.position.set(0,75,-30); 
+scene.add(textoMesh2);
+
+// PAPEL PICADO 3 
+var texto3 = new TextGeometry('? # / @ & $ : ', {
+  font: font, size: 10, height: .3
+});
+texto3.center();
+var material3 = new THREE.MeshLambertMaterial({
+  color: 0x140C5C, emissive: 0x140C5C, shading: THREE.FlatShading,
+});
+var textoMesh3 = new THREE.Mesh(texto3, material3);
+textoMesh3.position.set(0,60,-30);
+scene.add(textoMesh3);
+
+// PAPEL PICADO 4 
+var texto4 = new TextGeometry('# / @ & $ : ? ', {
+  font: font, size: 10, height: .3
+});
+texto4.center();
+var material4 = new THREE.MeshLambertMaterial({
+  color: 0x068C24, emissive: 0x068C24, shading: THREE.FlatShading,
+});
+var textoMesh4 = new THREE.Mesh(texto4, material4);
+textoMesh4.position.set(0,45,-30);
+scene.add(textoMesh4);
+
+// PAPEL PICADO 5 
+var texto5 = new TextGeometry('/ @ & $ : ? #', {
+  font: font, size: 10, height: .3
+});
+texto5.center();
+var material5 = new THREE.MeshLambertMaterial({
+  color: 0x7D0E22, emissive: 0x7D0E22, shading: THREE.FlatShading,
+});
+var textoMesh5 = new THREE.Mesh(texto5, material5);
+textoMesh5.position.set(0,30,-30);
+scene.add(textoMesh5);
+
+// PAPEL PICADO 6 
+var texto6 = new TextGeometry('@ & $ : ? # /', {
+  font: font, size: 10, height: .3
+});
+texto6.center();
+var material6 = new THREE.MeshLambertMaterial({
+  color: 0x000000, emissive: 0x000000, shading: THREE.FlatShading,
+});
+var textoMesh6 = new THREE.Mesh(texto6, material6);
+textoMesh6.position.set(0,15,-30);
+scene.add(textoMesh6);
+
+
+
+
+//Comida
+
+//POLLO
+
+    const pollito = pollo({x: 38, y: 10, z:-7});
+    scene.add(pollito);
+    pollito.scale.set(.7,.7,.7);
+
+    var pollo1=pollito.clone();
+    pollo1.position.set(23 , 25 ,-10);
+    scene.add(pollo1);
+
+    var pollo2=pollito.clone();
+    pollo2.position.set(-28 , 20,-10);
+    scene.add(pollo2);
+
+//Pozole
+const escenario = pozole1({x: 38, y: 10, z: 10});
+scene.add(escenario);
+escenario.scale.set(.2,.2,.2);
+
+    var poz=escenario.clone();
+    poz.position.set(10 , 30 ,-17);
+    scene.add(poz);
+
+    var poz1=escenario.clone();
+    poz1.position.set(-10 , 15 ,9);
+    scene.add(poz1);
+
+
+//Pan
+const panes = pan({x: -31, y: 14.5, z: 9}); 
+scene.add(panes);
+panes.scale.set(1,1,1);
+
+    var pan1=panes.clone();
+    pan1.position.set(0 , 19,1);
+    scene.add(pan1);
+
+    var pan2=panes.clone();
+    pan2.position.set(44,4,19);
+    scene.add(pan2);
+
+//NARANJAS
+    const naran = naranja({x: 32, y: 15, z: 0});
+    scene.add(naran);
+    naran.scale.set(.3,.3,.3); 
+
+    var na1=naran.clone();
+    na1.position.set(-8 , 30 ,-17); 
+    scene.add(na1);
+
+
+//CAÑAS
+    const cañas = caña({x: 44, y: 5, z: 0});
+    scene.add(cañas);
+    cañas.scale.set(.3,.3,.3);
+
+    var ca1=cañas.clone();
+    ca1.position.set(-12 , 26 ,-10); 
+    scene.add(ca1);
+
+//Manzana
+const manzanita = manzana({x: 0, y: 10, z: 20});
+//scene.add(manzanita);
+manzanita.scale.set(.5,.5, .5);
+
+    var man=manzanita.clone();
+    man.position.set(20 , 20.5 ,2); 
+    //scene.add(man);
+    var man1=manzanita.clone();
+    man1.position.set(23 , 20.5 ,2); 
+    //scene.add(man1);
+    var man2=manzanita.clone();
+    man2.position.set(22 , 20.5 ,-1); 
+    //scene.add(man2);
+    var man3=manzanita.clone();
+    man3.position.set(22 , 22 ,1); 
+    //scene.add(man3);
+
+
+// manzanas
+    var MANZANAS=new THREE.Group()
+    MANZANAS.add(man,man1,man2,man3);
+    scene.add(MANZANAS);
+
+//grupo
+    var MANZANAS1=MANZANAS.clone();
+    MANZANAS1.position.set(-40 ,-10 ,20 );  
+    scene.add(MANZANAS1);
+
+    var MANZANAS2=MANZANAS.clone();
+    MANZANAS2.position.set(-39,10 ,-19);
+    scene.add(MANZANAS2);
+
+
+//TAMAL
+var geometry02 = new RoundedBoxGeometry(1,2,.4,3,.8);
+var textura1=new THREE.TextureLoader().load("assets/hoja2.jpg");
+var material08 = new THREE.MeshLambertMaterial({map:textura1})
+var mesh10 = new THREE.Mesh (geometry02,material08);
+mesh10.position.set(-20,21,2);
+mesh10.scale.set(2,2,2);
+scene.add(mesh10);
+mesh10.rotation.set(1.6,0,0)
+
+var tam=mesh10.clone();
+    tam.position.set(-22,21,2); 
+    scene.add(tam);
+
+var tam1=mesh10.clone();
+    tam1.position.set(-21,22,2);
+    tam1.rotation.set(1.6,0,1.6) 
+    scene.add(tam1);
+
+//TEQUILA
+
+    const teq1=tequila({x:-38,y:10,z:0})
+    scene.add(teq1)
+    teq1.scale.set(.8,.8,.8)
+
+    var teq2=teq1.clone();
+    teq2.position.set(27,20,-5); 
+    scene.add(teq2);
+
+//Vasos
+    const vasitos=vaso({x:0,y:10,z:15});
+    scene.add(vasitos);
+    vasitos.scale.set(1,1,1);
+
+    var vaso1=vasitos.clone();
+    vaso1.position.set(-25,20,-5);
+    scene.add(vaso1);
+
+    var vaso2=vasitos.clone();
+    vaso2.position.set(32,14,6 );
+    scene.add(vaso2);
+
+
+
+//Objetos
+    //Jarron
+    const escenario2 = jarron({x: 15, y:14.5, z: 13.5  });
+    scene.add(escenario2);
+    escenario2.scale.set(.8,.8,.8);
+
+    //CRUZ
+    const cruces = cruz1({x: 0, y: 40, z: -25});
+    //cruces.scale.set(1,1,1);
+    //scene.add(cruces);
+
+    var c1=cruces.clone();
+    c1.position.set(0, 35 ,-25);
+    scene.add(c1);
+    c1.scale.set(1,1,1);
+
+    //BALERO
+
+    const bal1 = balero({x:-23, y: 6, z: 28});
+    bal1.scale.set(1,1,1);
+    scene.add(bal1); 
+    bal1.rotation.set(0,0, 1.57);
+
+    var bal2=bal1.clone();
+    bal2.position.set(-13,16,10)
+    scene.add(bal2); 
+    bal2.rotation.set(0,0.78, 1.57);
+
+//REILETE
+    const re1 = reilete({x:-43, y: 10, z: -25});
+    re1.scale.set(.5,.5,.5);
+    re1.rotation.set(0, 1.57, 0);
+    scene.add(re1); 
+   
+
+    var re2=re1.clone();
+    re2.position.set(43,10,-25)
+    scene.add(re2); 
+    
+
+
+    //Calaca
+    const calacas = calaca({x: 10, y: 11, z: 20});
+    scene.add(calacas);
+    calacas.scale.set(.7,.7,.7);
+//PISO 1
+    var calaca1=calacas.clone();
+    calaca1.position.set(0,6,27.5)
+    scene.add(calaca1);
+
+    var calaca2=calacas.clone();
+    calaca2.position.set(20,6,27.5)
+    scene.add(calaca2);
+
+    var calaca4=calacas.clone();
+    calaca4.position.set(40,6,27.5)
+    scene.add(calaca4);
+
+    var calaca3=calacas.clone();
+    calaca3.position.set(-20,6,27.5)
+    scene.add(calaca3);
+
+    var calaca5=calacas.clone();
+    calaca5.position.set(-40,6,27.5)
+    scene.add(calaca5);
+
+//PISO 2
+    var calaca6=calacas.clone();
+    calaca6.position.set(30,11,20)
+    scene.add(calaca6);
+
+    var calaca7=calacas.clone();
+    calaca7.position.set(-10,11,20)
+    scene.add(calaca7);
+
+    var calaca8=calacas.clone();
+    calaca8.position.set(-30,11,20)
+    scene.add(calaca8);
+
+//PISO 3
+    var calaca9=calacas.clone();
+    calaca9.position.set(0,16,12)
+    scene.add(calaca9);
+
+    var calaca10=calacas.clone();
+    calaca10.position.set(20,16,12)
+    scene.add(calaca10);
+
+    var calaca11=calacas.clone();
+    calaca11.position.set(-20,16,12)
+    scene.add(calaca11);
+
+//PISO 4
+    var calaca12=calacas.clone();
+    calaca12.position.set(10,21,1)
+    scene.add(calaca12);
+
+    var calaca13=calacas.clone();
+    calaca13.position.set(-10,21,1)
+    scene.add(calaca13);
+
+// PISO 5
+
+    var calaca14=calacas.clone();
+    calaca14.position.set(0,26,-8)
+    scene.add(calaca14);
+
+    //Porta retrato
+
+var geometry08 = new THREE.BoxGeometry(4,4,.2,4,12,20);
+var textura1=new THREE.TextureLoader().load("assets/1.jpeg");
+var material08 = new THREE.MeshLambertMaterial({map:textura1})
+var mesh08 =new THREE.Mesh(geometry08,material08);
+
+mesh08.position.set(0,5,-5);
+var geometry8 = new THREE.BoxGeometry(5,5,.2,4,12,20);
+var material8 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var mesh081 =new THREE.Mesh(geometry8,material8);
+
+mesh081.position.set(0,5,-5.1);
+var geometry9 = new THREE.BoxGeometry(1,5,.2,4,12,20);
+var material9 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var mesh082 =new THREE.Mesh(geometry9,material9);
+mesh082.position.set(0,5,-6.55);
+mesh082.rotation.set(.5,0,0);
+
+var retrato = new THREE.Group()
+retrato.add(mesh08,mesh081,mesh082);
+retrato.position.set(-15,18,8 );
+scene.add(retrato);
+
+// RETRATO 2
+var g1 = new THREE.BoxGeometry(4,4,.2,4,12,20);
+var textura2=new THREE.TextureLoader().load("assets/2.jpeg");
+var m1 = new THREE.MeshLambertMaterial({map:textura2})
+var a1 =new THREE.Mesh(g1,m1);
+
+a1.position.set(0,5,-5);
+var g2 = new THREE.BoxGeometry(5,5,.2,4,12,20);
+var m2 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a2 =new THREE.Mesh(g2,m2);
+
+a2.position.set(0,5,-5.1);
+var g3 = new THREE.BoxGeometry(1,5,.2,4,12,20);
+var m3 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a3 =new THREE.Mesh(g3,m3);
+a3.position.set(0,5,-6.55);
+a3.rotation.set(.5,0,0);
+
+var retrato2 = new THREE.Group()
+retrato2.add(a1,a2,a3);
+retrato2.position.set(17,7.5,25 );
+retrato2.scale.set(1.5,1,1);
+scene.add(retrato2);
+
+//RETRATO 3
+var g11 = new THREE.BoxGeometry(4,4,.2,4,12,20);
+var textura21=new THREE.TextureLoader().load("assets/3.jpeg");
+var m11 = new THREE.MeshLambertMaterial({map:textura21})
+var a11 =new THREE.Mesh(g11,m11);
+
+a11.position.set(0,5,-5);
+var g21 = new THREE.BoxGeometry(5,5,.2,4,12,20);
+var m21 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a21 =new THREE.Mesh(g21,m21);
+
+a21.position.set(0,5,-5.1);
+var g31 = new THREE.BoxGeometry(1,5,.2,4,12,20);
+var m31 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a31 =new THREE.Mesh(g31,m31);
+a31.position.set(0,5,-6.55);
+a31.rotation.set(.5,0,0);
+
+var retrato21 = new THREE.Group()
+retrato21.add(a11,a21,a31 );
+retrato21.position.set(6,22.5,-4);
+retrato21.scale.set(1,1,1);
+scene.add(retrato21);
+
+//RETRATO 3
+
+var g12 = new THREE.BoxGeometry(4,4,.2,4,12,20);
+var textura22=new THREE.TextureLoader().load("assets/4.jpeg");
+var m12 = new THREE.MeshLambertMaterial({map:textura22})
+var a12 =new THREE.Mesh(g12,m12);
+
+a12.position.set(0,5,-5);
+var g22 = new THREE.BoxGeometry(5,5,.2,4,12,20);
+var m22 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a22 =new THREE.Mesh(g22,m22);
+
+a22.position.set(0,5,-5.1);
+var g32 = new THREE.BoxGeometry(1,5,.2,4,12,20);
+var m32 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a32 =new THREE.Mesh(g32,m32);
+a32.position.set(0,5,-6.55);
+a32.rotation.set(.5,0,0);
+
+var retrato22 = new THREE.Group()
+retrato22.add(a12,a22,a32 );
+retrato22.position.set(0,27.5 ,-11);
+retrato22.scale.set(1.5,1,1);
+scene.add(retrato22);
+
+//RETRATO 4
+
+var g13 = new THREE.BoxGeometry(4,4,.2,4,12,20);
+var textura23=new THREE.TextureLoader().load("assets/5.jpeg");
+var m13 = new THREE.MeshLambertMaterial({map:textura23})
+var a13 =new THREE.Mesh(g13,m13); 
+
+a13.position.set(0,5,-5);
+var g23 = new THREE.BoxGeometry(5,5,.2,4,12,20);
+var m23 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a23 =new THREE.Mesh(g23,m23);
+
+a23.position.set(0,5,-5.1);
+var g33 = new THREE.BoxGeometry(1,5,.2,4,12,20);
+var m33 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a33 =new THREE.Mesh(g33,m33);
+a33.position.set(0,5,-6.55);
+a33.rotation.set(.5,0,0);
+
+var retrato23 = new THREE.Group()
+retrato23.add(a13,a23,a33 );
+retrato23.position.set(15,18 ,5);
+retrato23.scale.set(1.5,1,1);
+scene.add(retrato23);
+
+
+//RETRATO 5
+
+var g14 = new THREE.BoxGeometry(4,4,.2,4,12,20);
+var textura24=new THREE.TextureLoader().load("assets/ab.jpeg");
+var m14 = new THREE.MeshLambertMaterial({map:textura24})
+var a14 =new THREE.Mesh(g14,m14);
+
+a14.position.set(0,5,-5);
+var g24 = new THREE.BoxGeometry(5,5,.2,4,12,20);
+var m24 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a24 =new THREE.Mesh(g24,m24);
+
+a24.position.set(0,5,-5.1);
+var g34 = new THREE.BoxGeometry(1,5,.2,4,12,20);
+var m34 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a34 =new THREE.Mesh(g34,m34);
+a34.position.set(0,5,-6.55);
+a34.rotation.set(.5,0,0);
+
+var retrato24 = new THREE.Group()
+retrato24.add(a14,a24,a34 );
+retrato24.position.set(-9,2.5 ,33);
+retrato24.scale.set(1.3,1,1);
+scene.add(retrato24);
+
+//RETRATO 6
+
+var g15 = new THREE.BoxGeometry(4,4,.2,4,12,20);
+var textura25=new THREE.TextureLoader().load("assets/abu.jpeg");
+var m15 = new THREE.MeshLambertMaterial({map:textura25})
+var a15 =new THREE.Mesh(g15,m15);
+
+a15.position.set(0,5,-5);
+var g25 = new THREE.BoxGeometry(5,5,.2,4,12,20);
+var m25 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a25 =new THREE.Mesh(g25,m25);
+
+a25.position.set(0,5,-5.1);
+var g35 = new THREE.BoxGeometry(1,5,.2,4,12,20);
+var m35 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a35 =new THREE.Mesh(g35,m35);
+a35.position.set(0,5,-6.55);
+a35.rotation.set(.5,0,0);
+
+var retrato25 = new THREE.Group()
+retrato25.add(a15,a25,a35 );
+retrato25.position.set(8,12.5,15);
+retrato25.scale.set(1,1.3,1); 
+scene.add(retrato25);
+
+//RETRATO 7
+
+var g16 = new THREE.BoxGeometry(4,4,.2,4,12,20);
+var textura26=new THREE.TextureLoader().load("assets/papi.jpeg");
+var m16 = new THREE.MeshLambertMaterial({map:textura26})
+var a16 =new THREE.Mesh(g16,m16);
+
+a16.position.set(0,5,-5);
+var g26 = new THREE.BoxGeometry(5,5,.2,4,12,20);
+var m26 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a26 =new THREE.Mesh(g26,m26);
+
+a26.position.set(0,5,-5.1);
+var g36 = new THREE.BoxGeometry(1,5,.2,4,12,20);
+var m36 = new THREE.MeshLambertMaterial({color:0x57392e,side:THREE.DoubleSide});
+var a36 =new THREE.Mesh(g36,m36);
+a36.position.set(0,5,-6.55);
+a36.rotation.set(.5,0,0);
+
+var retrato26 = new THREE.Group()
+retrato26.add(a16,a26,a36 );
+retrato26.position.set(10,2 ,33);
+retrato26.scale.set(1.3,1.2,1);
+scene.add(retrato26);
+
+
+
+    /*
+
+    var retratos2=retratos.clone();
+    retratos2.position.set(-10,1.5,37)
+    scene.add(retratos2);
+
+    var retratos3=retratos.clone();
+    retratos3.position.set(5,11,20)
+    scene.add(retratos3);
+
+    var retratos4=retratos.clone();
+    retratos4.position.set(-7,21,1)
+    scene.add(retratos4);
+
+    var retratos5=retratos.clone();
+    retratos5.position.set(0,26,-8)
+    scene.add(retratos5);
+
+    var retratos6=retratos.clone();
+    retratos6.position.set(9,21,1)
+    scene.add(retratos6);
+
+    var retratos7=retratos.clone();
+    retratos7.position.set(8,1.5,37)
+    scene.add(retratos7);
+*/
+    //Velas
+
+// CRUZ DE VELAS
+    const velita=vela({x:0,y:0,z:60 });
+    scene.add(velita);
+    velita.scale.set(1,1,1);
+
+    var v1=velita.clone();
+    v1.position.set(0,0,55);
+    scene.add(v1);
+
+    var v2=velita.clone();
+    v2.position.set(0,0,50);
+    scene.add(v2);
+
+    var v3=velita.clone();
+    v3.position.set(0,0,45);
+    scene.add(v3);
+
+    var v4=velita.clone();
+    v4.position.set(0,0,40);
+    scene.add(v4); 
+
+    var v5=velita.clone();
+    v5.position.set(5,0,50)
+    scene.add(v5);
+
+    var v6=velita.clone();
+    v6.position.set(10,0,50)
+    scene.add(v6);
+
+    var v7=velita.clone();
+    v7.position.set(-5,0,50)
+    scene.add(v7);
+
+    var v8=velita.clone();
+    v8.position.set(-10,0,50)
+    scene.add(v8);
+    
+    var v9=velita.clone();
+    v9.position.set(0,0,65) 
+    scene.add(v9); 
+
+//VELA EN ALTAR
+    var ve1=velita.clone();
+    ve1.position.set(30,5,27.5);
+    scene.add(ve1);
+
+    var ve2=velita.clone();
+    ve2.position.set(-30,5,27.5);
+    scene.add(ve2);
+
+    var ve3=velita.clone();
+    ve3.position.set(26 ,15,11); 
+    scene.add(ve3);
+
+    var ve4=velita.clone();
+    ve4.position.set(-26,15,11);
+    scene.add(ve4); 
+
+    var ve5=velita.clone();
+    ve5.position.set(18,25,-8)
+    scene.add(ve5);
+
+    var ve6=velita.clone();
+    ve6.position.set(-18,25,-8)
+    scene.add(ve6);
+
+    var ve7=velita.clone();
+    ve7.position.set(-5,0,50)
+    scene.add(ve7);
+
+    var ve8=velita.clone();
+    ve8.position.set(10, 35 ,-25)
+    scene.add(ve8);
+    
+    var ve9=velita.clone();
+    ve9.position.set(-10 , 35 ,-25)  
+    scene.add(ve9); 
+
+//VELAS PARA EL CAMINITO 
+
+var luces = velita.clone(); 
+luces.position.set(-40, 1, 50);    
+scene.add(luces); 
+
+var luces1 = velita.clone();  
+luces1.position.set(-40, 1, 60);    
+scene.add(luces1); 
+
+var luces2 = velita.clone();  
+luces2.position.set(-40, 1, 70);    
+scene.add(luces2); 
+
+var luces3 = velita.clone();  
+luces3.position.set(-40, 1, 80);    
+scene.add(luces3); 
+
+var luces4 = velita.clone();  
+luces4.position.set(-40, 1, 90);    
+scene.add(luces4); 
+
+var luces5 = velita.clone();  
+luces5.position.set(-40, 1, 100);    
+scene.add(luces5); 
+
+var luces6 = velita.clone();  
+luces6.position.set(-40, 1, 110);    
+scene.add(luces6); 
+
+var luces7 = velita.clone();  
+luces7.position.set(-40, 1, 120);    
+scene.add(luces7); 
+
+var luces8 = velita.clone();  
+luces8.position.set(-40, 1, 130);    
+scene.add(luces8); 
+
+var luces9 = velita.clone();  
+luces9.position.set(-40, 1, 140);    
+scene.add(luces9); 
+
+var luces10 = velita.clone();  
+luces10.position.set(-40, 1, 150);    
+scene.add(luces10); 
+
+var luces11 = velita.clone();  
+luces11.position.set(-40, 1, 160);    
+scene.add(luces11); 
+
+var luces12 = velita.clone();  
+luces12.position.set(-40, 1, 170);    
+scene.add(luces12); 
+
+var luces13 = velita.clone();  
+luces13.position.set(-40, 1, 180);    
+scene.add(luces13); 
+
+var luces14 = velita.clone();  
+luces14.position.set(-40, 1, 190);    
+scene.add(luces14); 
+
+var luces15 = velita.clone();  
+luces15.position.set(-40, 1, 200);    
+scene.add(luces15); 
+
+var luces16 = velita.clone();  
+luces16.position.set(-40, 1, 210);    
+scene.add(luces16); 
+
+var luces17 = velita.clone();  
+luces17.position.set(-40, 1, 220);    
+scene.add(luces17); 
+
+var luces18 = velita.clone();  
+luces18.position.set(-40, 1, 230);    
+scene.add(luces18); 
+
+var luces19 = velita.clone();  
+luces19.position.set(-40, 1, 240);    
+scene.add(luces19); 
+
+var luces20 = velita.clone();  
+luces20.position.set(-40, 1, 250);    
+scene.add(luces20); 
+
+var luces21 = velita.clone();  
+luces21.position.set(-40, 1, 260);    
+scene.add(luces21); 
+
+var luces22 = velita.clone();  
+luces22.position.set(-40, 1, 270);    
+scene.add(luces22); 
+
+var luces23 = velita.clone();  
+luces23.position.set(-40, 1, 280);    
+scene.add(luces23); 
+
+var luces24 = velita.clone();  
+luces24.position.set(-40, 1, 290);    
+scene.add(luces24); 
+
+var luces25 = velita.clone();  
+luces25.position.set(-40, 1, 300);    
+scene.add(luces25); 
+
+var luces26 = velita.clone();  
+luces26.position.set(-40, 1, 310);    
+scene.add(luces26); 
+
+var luces27 = velita.clone();  
+luces27.position.set(-40, 1, 320);    
+scene.add(luces27); 
+
+var luces28 = velita.clone();  
+luces28.position.set(-40, 1, 330);    
+scene.add(luces28); 
+
+var luces29 = velita.clone();  
+luces29.position.set(-40, 1, 340);    
+scene.add(luces29); 
+ 
+var luces301 = velita.clone(); 
+luces301.position.set(40, 1, 50);    
+scene.add(luces301); 
+
+var luces31 = velita.clone();  
+luces31.position.set(40, 1, 60);    
+scene.add(luces31); 
+
+var luces32 = velita.clone();  
+luces32.position.set(40, 1, 70);    
+scene.add(luces32); 
+
+var luces33 = velita.clone();  
+luces33.position.set(40, 1, 80);    
+scene.add(luces33); 
+
+var luces34 = velita.clone();  
+luces34.position.set(40, 1, 90);    
+scene.add(luces34); 
+
+var luces35 = velita.clone();  
+luces35.position.set(40, 1, 100);    
+scene.add(luces35); 
+
+var luces36 = velita.clone();  
+luces36.position.set(40, 1, 110);    
+scene.add(luces36); 
+
+var luces37 = velita.clone();  
+luces37.position.set(40, 1, 120);    
+scene.add(luces37); 
+
+var luces38 = velita.clone();  
+luces38.position.set(40, 1, 130);    
+scene.add(luces38); 
+
+var luces39 = velita.clone();  
+luces39.position.set(40, 1, 140);    
+scene.add(luces39); 
+
+var luces40 = velita.clone();  
+luces40.position.set(40, 1, 150);    
+scene.add(luces40); 
+
+var luces41 = velita.clone();  
+luces41.position.set(40, 1, 160);    
+scene.add(luces41); 
+
+var luces42 = velita.clone();  
+luces42.position.set(40, 1, 170);    
+scene.add(luces42); 
+
+var luces43 = velita.clone();  
+luces43.position.set(40, 1, 180);    
+scene.add(luces43); 
+
+var luces44 = velita.clone();  
+luces44.position.set(40, 1, 190);    
+scene.add(luces44); 
+
+var luces45 = velita.clone();  
+luces45.position.set(40, 1, 200);    
+scene.add(luces45); 
+
+var luces46 = velita.clone();  
+luces46.position.set(40, 1, 210);    
+scene.add(luces46); 
+
+var luces47 = velita.clone();  
+luces47.position.set(40, 1, 220);    
+scene.add(luces47); 
+
+var luces48 = velita.clone();  
+luces48.position.set(40, 1, 230);    
+scene.add(luces48); 
+
+var luces49 = velita.clone();  
+luces49.position.set(40, 1, 240);    
+scene.add(luces49); 
+
+var luces50 = velita.clone();  
+luces50.position.set(40, 1, 250);    
+scene.add(luces50); 
+
+var luces51 = velita.clone();  
+luces51.position.set(40, 1, 260);    
+scene.add(luces51); 
+
+var luces52 = velita.clone();  
+luces52.position.set(40, 1, 270);    
+scene.add(luces52); 
+
+var luces53 = velita.clone();  
+luces53.position.set(40, 1, 280);    
+scene.add(luces53); 
+
+var luces54 = velita.clone();  
+luces54.position.set(40, 1, 290);    
+scene.add(luces54); 
+
+var luces55 = velita.clone();  
+luces55.position.set(40, 1, 300);    
+scene.add(luces55); 
+
+var luces56 = velita.clone();  
+luces56.position.set(40, 1, 310);    
+scene.add(luces56); 
+
+var luces57 = velita.clone();  
+luces57.position.set(40, 1, 320);    
+scene.add(luces57); 
+
+var luces58 = velita.clone();  
+luces58.position.set(40, 1, 330);    
+scene.add(luces58); 
+
+var luces59 = velita.clone();  
+luces59.position.set(40, 1, 340);    
+scene.add(luces59); 
+
+
+
+//Flores
+
+//CAMINO DE FLORES
+//DERECHA
+
+    //FLOR 1
+var geometry13 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material12 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh13 =new THREE.Mesh(geometry13,material12);
+scene.add(mesh13);
+mesh13.position.set(40,0,50);
+mesh13.scale.set(7,7,7);
+mesh13.rotation.set(-1.57,0,0);
+
+//FLOR 2
+var geometry14 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material13 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh14 =new THREE.Mesh(geometry14,material13);
+scene.add(mesh14);
+mesh14.position.set(40,0,60);
+mesh14.scale.set(7,7,7);
+mesh14.rotation.set(-1.57,0,0);
+
+//FLOR 3
+var geometry15 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material14 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh15 =new THREE.Mesh(geometry15,material14);
+scene.add(mesh15);
+mesh15.position.set(40,0,70);
+mesh15.scale.set(7,7,7);
+mesh15.rotation.set(-1.57,0,0);
+
+//FLOR 4
+var geometry16 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material15 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh16 =new THREE.Mesh(geometry16,material15);
+scene.add(mesh16);
+mesh16.position.set(40,0,80);
+mesh16.scale.set(7,7,7);
+mesh16.rotation.set(-1.57,0,0);
+
+//FLOR 5
+var geometry17 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material16 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh17 =new THREE.Mesh(geometry17,material16);
+scene.add(mesh17);
+mesh17.position.set(40,0,90);
+mesh17.scale.set(7,7,7);
+mesh17.rotation.set(-1.57,0,0);
+
+//FLOR 6
+var geometry18 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material17 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh18 =new THREE.Mesh(geometry18,material17);
+scene.add(mesh18);
+mesh18.position.set(40,0,100);
+mesh18.scale.set(7,7,7);
+mesh18.rotation.set(-1.57,0,0);
+
+//FLOR 7
+var geometry19 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material18 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh19 =new THREE.Mesh(geometry19,material18);
+scene.add(mesh19);
+mesh19.position.set(40,0,110);
+mesh19.scale.set(7,7,7);
+mesh19.rotation.set(-1.57,0,0);
+
+//FLOR 8
+var geometry20 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material19 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh20 =new THREE.Mesh(geometry20,material19);
+scene.add(mesh20);
+mesh20.position.set(40,0,120);
+mesh20.scale.set(7,7,7);
+mesh20.rotation.set(-1.57,0,0);
+
+//FLOR 9
+var geometry21 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material20 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh21 =new THREE.Mesh(geometry21,material20);
+scene.add(mesh21);
+mesh21.position.set(40,0,130);
+mesh21.scale.set(7,7,7);
+mesh21.rotation.set(-1.57,0,0);
+
+//FLOR 10
+var geometry22 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material21 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh22 =new THREE.Mesh(geometry22,material21);
+scene.add(mesh22);
+mesh22.position.set(40,0,140);
+mesh22.scale.set(7,7,7);
+mesh22.rotation.set(-1.57,0,0);
+
+//FLOR 11
+var geometry23 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material22 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh23 =new THREE.Mesh(geometry23,material22);
+scene.add(mesh23);
+mesh23.position.set(40,0,150);
+mesh23.scale.set(7,7,7);
+mesh23.rotation.set(-1.57,0,0);
+
+//FLOR 12
+var geometry24 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material23 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh24 =new THREE.Mesh(geometry24,material23);
+scene.add(mesh24);
+mesh24.position.set(40,0,160);
+mesh24.scale.set(7,7,7);
+mesh24.rotation.set(-1.57,0,0);
+
+//FLOR 13
+var geometry25 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material24 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh25 =new THREE.Mesh(geometry25,material24);
+scene.add(mesh25);
+mesh25.position.set(40,0,170);
+mesh25.scale.set(7,7,7);
+mesh25.rotation.set(-1.57,0,0);
+
+//FLOR 14
+var geometry26 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material25 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh26 =new THREE.Mesh(geometry26,material25);
+scene.add(mesh26);
+mesh26.position.set(40,0,180);
+mesh26.scale.set(7,7,7);
+mesh26.rotation.set(-1.57,0,0);
+
+//FLOR 15
+var geometry27 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material26 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh27 =new THREE.Mesh(geometry27,material26);
+scene.add(mesh27);
+mesh27.position.set(40,0,190);
+mesh27.scale.set(7,7,7);
+mesh27.rotation.set(-1.57,0,0);
+
+//FLOR 16
+var geometry28 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material27 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh28 =new THREE.Mesh(geometry28,material27);
+scene.add(mesh28);
+mesh28.position.set(40,0,200);
+mesh28.scale.set(7,7,7);
+mesh28.rotation.set(-1.57,0,0);
+
+//FLOR 17
+var geometry29 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material28 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh29 =new THREE.Mesh(geometry29,material28);
+scene.add(mesh29);
+mesh29.position.set(40,0,210);
+mesh29.scale.set(7,7,7);
+mesh29.rotation.set(-1.57,0,0);
+
+//FLOR 18
+var geometry30 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material29 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh30 =new THREE.Mesh(geometry30,material29);
+scene.add(mesh30);
+mesh30.position.set(40,0,220);
+mesh30.scale.set(7,7,7);
+mesh30.rotation.set(-1.57,0,0);
+
+//FLOR 19
+var geometry31 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material30 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh31 =new THREE.Mesh(geometry31,material30);
+scene.add(mesh31);
+mesh31.position.set(40,0,230);
+mesh31.scale.set(7,7,7);
+mesh31.rotation.set(-1.57,0,0);
+
+//FLOR 20
+var geometry32 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material31 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh32 =new THREE.Mesh(geometry32,material31);
+scene.add(mesh32);
+mesh32.position.set(40,0,240);
+mesh32.scale.set(7,7,7);
+mesh32.rotation.set(-1.57,0,0);
+
+//FLOR 21
+var geometry33 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material32 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh33 =new THREE.Mesh(geometry33,material32);
+scene.add(mesh33);
+mesh33.position.set(40,0,250);
+mesh33.scale.set(7,7,7);
+mesh33.rotation.set(-1.57,0,0);
+
+//FLOR 22
+var geometry34 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material33 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh34 =new THREE.Mesh(geometry34,material33);
+scene.add(mesh34);
+mesh34.position.set(40,0,260);
+mesh34.scale.set(7,7,7);
+mesh34.rotation.set(-1.57,0,0);
+
+//FLOR 23
+var geometry35 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material34 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh35 =new THREE.Mesh(geometry35,material34);
+scene.add(mesh35);
+mesh35.position.set(40,0,270);
+mesh35.scale.set(7,7,7);
+mesh35.rotation.set(-1.57,0,0);
+
+//FLOR 24
+var geometry36 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material35 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh36 =new THREE.Mesh(geometry36,material35);
+scene.add(mesh36);
+mesh36.position.set(40,0,280);
+mesh36.scale.set(7,7,7);
+mesh36.rotation.set(-1.57,0,0);
+
+//FLOR 25
+var geometry37 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material36 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh37 =new THREE.Mesh(geometry37,material36);
+scene.add(mesh37);
+mesh37.position.set(40,0,290);
+mesh37.scale.set(7,7,7);
+mesh37.rotation.set(-1.57,0,0);
+
+//FLOR 26
+var geometry38 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material37 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh38 =new THREE.Mesh(geometry38,material37);
+scene.add(mesh38);
+mesh38.position.set(40,0,300);
+mesh38.scale.set(7,7,7);
+mesh38.rotation.set(-1.57,0,0);
+
+//FLOR 27
+var geometry39 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material38 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh39 =new THREE.Mesh(geometry39,material38);
+scene.add(mesh39);
+mesh39.position.set(40,0,310);
+mesh39.scale.set(7,7,7);
+mesh39.rotation.set(-1.57,0,0);
+
+//FLOR 28
+var geometry40 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material39 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh40 =new THREE.Mesh(geometry40,material39);
+scene.add(mesh40);
+mesh40.position.set(40,0,320);
+mesh40.scale.set(7,7,7);
+mesh40.rotation.set(-1.57,0,0);
+
+//FLOR 29
+var geometry41 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material40 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh41 =new THREE.Mesh(geometry41,material40);
+scene.add(mesh41);
+mesh41.position.set(40,0,330);
+mesh41.scale.set(7,7,7);
+mesh41.rotation.set(-1.57,0,0);
+
+//FLOR 30
+var geometry42 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material41 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh42 =new THREE.Mesh(geometry42,material41);
+scene.add(mesh42);
+mesh42.position.set(40,0,340);
+mesh42.scale.set(7,7,7);
+mesh42.rotation.set(-1.57,0,0);
+
+//IZQUIERDA 
+//FLOR 1
+var geometry43 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material42 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh43 =new THREE.Mesh(geometry43,material42);
+scene.add(mesh43);
+mesh43.position.set(-40,0,50);
+mesh43.scale.set(7,7,7);
+mesh43.rotation.set(-1.57,0,0);
+
+//FLOR 2
+var geometry44 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material43 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh44 =new THREE.Mesh(geometry44,material43);
+scene.add(mesh44);
+mesh44.position.set(-40,0,60);
+mesh44.scale.set(7,7,7);
+mesh44.rotation.set(-1.57,0,0);
+
+//FLOR 3
+var geometry45 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material44 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh45 =new THREE.Mesh(geometry45,material44);
+scene.add(mesh45);
+mesh45.position.set(-40,0,70);
+mesh45.scale.set(7,7,7);
+mesh45.rotation.set(-1.57,0,0);
+
+//FLOR 4
+var geometry46 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material45 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh46 =new THREE.Mesh(geometry46,material45);
+scene.add(mesh46);
+mesh46.position.set(-40,0,80);
+mesh46.scale.set(7,7,7);
+mesh46.rotation.set(-1.57,0,0);
+
+//FLOR 5
+var geometry47 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material46 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh47 =new THREE.Mesh(geometry47,material46);
+scene.add(mesh47);
+mesh47.position.set(-40,0,90);
+mesh47.scale.set(7,7,7);
+mesh47.rotation.set(-1.57,0,0);
+
+//FLOR 6
+var geometry48 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material47 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh48 =new THREE.Mesh(geometry48,material47);
+scene.add(mesh48);
+mesh48.position.set(-40,0,100);
+mesh48.scale.set(7,7,7);
+mesh48.rotation.set(-1.57,0,0);
+
+//FLOR 7
+var geometry49 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material48 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh49 =new THREE.Mesh(geometry49,material48);
+scene.add(mesh49);
+mesh49.position.set(-40,0,110);
+mesh49.scale.set(7,7,7);
+mesh49.rotation.set(-1.57,0,0);
+
+//FLOR 8
+var geometry50 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material49 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh50 =new THREE.Mesh(geometry50,material49);
+scene.add(mesh50);
+mesh50.position.set(-40,0,120);
+mesh50.scale.set(7,7,7);
+mesh50.rotation.set(-1.57,0,0);
+
+//FLOR 9
+var geometry51 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material50 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh51 =new THREE.Mesh(geometry51,material50);
+scene.add(mesh51);
+mesh51.position.set(-40,0,130);
+mesh51.scale.set(7,7,7);
+mesh51.rotation.set(-1.57,0,0);
+
+//FLOR 10
+var geometry52 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material51 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh52 =new THREE.Mesh(geometry52,material51);
+scene.add(mesh52);
+mesh52.position.set(-40,0,140);
+mesh52.scale.set(7,7,7);
+mesh52.rotation.set(-1.57,0,0);
+
+//FLOR 11
+var geometry53 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material52 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh53 =new THREE.Mesh(geometry53,material52);
+scene.add(mesh53);
+mesh53.position.set(-40,0,150);
+mesh53.scale.set(7,7,7);
+mesh53.rotation.set(-1.57,0,0);
+
+//FLOR 12
+var geometry54 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material53 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh54 =new THREE.Mesh(geometry54,material53);
+scene.add(mesh54);
+mesh54.position.set(-40,0,160);
+mesh54.scale.set(7,7,7);
+mesh54.rotation.set(-1.57,0,0);
+
+//FLOR 13
+var geometry55 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material54 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh55 =new THREE.Mesh(geometry55,material54);
+scene.add(mesh55);
+mesh55.position.set(-40,0,170);
+mesh55.scale.set(7,7,7);
+mesh55.rotation.set(-1.57,0,0);
+
+//FLOR 14
+var geometry56 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material55 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh56 =new THREE.Mesh(geometry56,material55);
+scene.add(mesh56);
+mesh56.position.set(-40,0,180);
+mesh56.scale.set(7,7,7);
+mesh56.rotation.set(-1.57,0,0);
+
+//FLOR 15
+var geometry57 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material56 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh57 =new THREE.Mesh(geometry57,material56);
+scene.add(mesh57);
+mesh57.position.set(-40,0,190);
+mesh57.scale.set(7,7,7);
+mesh57.rotation.set(-1.57,0,0);
+
+//FLOR 16
+var geometry58 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material57 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh58 =new THREE.Mesh(geometry58,material57);
+scene.add(mesh58);
+mesh58.position.set(-40,0,200);
+mesh58.scale.set(7,7,7);
+mesh58.rotation.set(-1.57,0,0);
+
+//FLOR 17
+var geometry59 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material58 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh59 =new THREE.Mesh(geometry59,material58);
+scene.add(mesh59);
+mesh59.position.set(-40,0,210);
+mesh59.scale.set(7,7,7);
+mesh59.rotation.set(-1.57,0,0);
+
+//FLOR 18
+var geometry60 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material59 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh60 =new THREE.Mesh(geometry60,material59);
+scene.add(mesh60);
+mesh60.position.set(-40,0,220);
+mesh60.scale.set(7,7,7);
+mesh60.rotation.set(-1.57,0,0);
+
+//FLOR 19
+var geometry61 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material60 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh61 =new THREE.Mesh(geometry61,material60);
+scene.add(mesh61);
+mesh61.position.set(-40,0,230);
+mesh61.scale.set(7,7,7);
+mesh61.rotation.set(-1.57,0,0);
+
+//FLOR 20
+var geometry62 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material61 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh62 =new THREE.Mesh(geometry62,material61);
+scene.add(mesh62);
+mesh62.position.set(-40,0,240);
+mesh62.scale.set(7,7,7);
+mesh62.rotation.set(-1.57,0,0);
+
+//FLOR 21
+var geometry63 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material62 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh63 =new THREE.Mesh(geometry63,material62);
+scene.add(mesh63);
+mesh63.position.set(-40,0,250);
+mesh63.scale.set(7,7,7);
+mesh63.rotation.set(-1.57,0,0);
+
+//FLOR 22
+var geometry64 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material63 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh64 =new THREE.Mesh(geometry64,material63);
+scene.add(mesh64);
+mesh64.position.set(-40,0,260);
+mesh64.scale.set(7,7,7);
+mesh64.rotation.set(-1.57,0,0);
+
+//FLOR 23
+var geometry65 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material64 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh65 =new THREE.Mesh(geometry65,material64);
+scene.add(mesh65);
+mesh65.position.set(-40,0,270);
+mesh65.scale.set(7,7,7);
+mesh65.rotation.set(-1.57,0,0);
+
+//FLOR 24
+var geometry66 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material65 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh66 =new THREE.Mesh(geometry66,material65);
+scene.add(mesh66);
+mesh66.position.set(-40,0,280);
+mesh66.scale.set(7,7,7);
+mesh66.rotation.set(-1.57,0,0);
+
+//FLOR 25
+var geometry67 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material66 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh67 =new THREE.Mesh(geometry67,material66);
+scene.add(mesh67);
+mesh67.position.set(-40,0,290);
+mesh67.scale.set(7,7,7);
+mesh67.rotation.set(-1.57,0,0);
+
+//FLOR 26
+var geometry68 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material67 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh68 =new THREE.Mesh(geometry68,material67);
+scene.add(mesh68);
+mesh68.position.set(-40,0,300);
+mesh68.scale.set(7,7,7);
+mesh68.rotation.set(-1.57,0,0);
+
+//FLOR 27
+var geometry69 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material68 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh69 =new THREE.Mesh(geometry69,material68);
+scene.add(mesh69);
+mesh69.position.set(-40,0,310);
+mesh69.scale.set(7,7,7);
+mesh69.rotation.set(-1.57,0,0);
+
+//FLOR 28
+var geometry70 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material69 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh70 =new THREE.Mesh(geometry70,material69);
+scene.add(mesh70);
+mesh70.position.set(-40,0,320);
+mesh70.scale.set(7,7,7);
+mesh70.rotation.set(-1.57,0,0);
+
+//FLOR 29
+var geometry71 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material70 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh71 =new THREE.Mesh(geometry71,material70);
+scene.add(mesh71);
+mesh71.position.set(-40,0,330);
+mesh71.scale.set(7,7,7);
+mesh71.rotation.set(-1.57,0,0);
+
+//FLOR 30
+var geometry72 = new THREE.TorusKnotGeometry(.2,0.4 ,20,4,6,0);
+var material71 = new THREE.MeshLambertMaterial({color:0xFFAA00,side:THREE.DoubleSide});
+var mesh72 =new THREE.Mesh(geometry72,material71);
+scene.add(mesh72);
+mesh72.position.set(-40,0,340);
+mesh72.scale.set(7,7,7);
+mesh72.rotation.set(-1.57,0,0);
+
+
+    //Arco de flores
+    const FLOR1 = flores({x: 60 , y: 3, z: 50});
+    //scene.add(FLOR1);
+    FLOR1.scale.set(.7,.7,.7);
+    
+    var FLOR0 = FLOR1.clone();
+    FLOR0.position.set(0, 81 , 50); 
+    //scene.add(FLOR0);
+
+    var FLOR2 = FLOR1.clone();
+    FLOR2.position.set(-60 , 3, 50);
+    //scene.add(FLOR2);
+
+    var FLOR3 = FLOR1.clone();
+    FLOR3.position.set(-60, 8, 50);
+    //scene.add(FLOR3);
+
+    var FLOR4 = FLOR1.clone();
+    FLOR4.position.set(60, 8, 50);
+    //scene.add(FLOR4);
+
+    var FLOR5 = FLOR1.clone();
+    FLOR5.position.set(-60, 13, 50);
+    //scene.add(FLOR5);
+
+    var FLOR6 = FLOR1.clone();
+    FLOR6.position.set(60, 13, 50);
+    //scene.add(FLOR6);
+
+    var FLOR7 = FLOR1.clone();
+    FLOR7.position.set(-60, 18, 50);
+    //scene.add(FLOR7);
+
+    var FLOR8 = FLOR1.clone();
+    FLOR8.position.set(60, 18, 50);
+    //scene.add(FLOR8);
+
+    var FLOR9 = FLOR1.clone();
+    FLOR9.position.set(-60, 23, 50);
+    //scene.add(FLOR9);
+
+    var FLOR10 = FLOR1.clone();
+    FLOR10.position.set(60, 23, 50);
+    //scene.add(FLOR10);
+
+    var FLOR11 = FLOR1.clone();
+    FLOR11.position.set(-60, 28, 50);
+    //scene.add(FLOR11);
+
+    var FLOR12 = FLOR1.clone();
+    FLOR12.position.set(60, 28, 50);
+    //scene.add(FLOR12);
+    
+    var FLOR13 = FLOR1.clone();
+    FLOR13.position.set(-60, 33, 50);
+    //scene.add(FLOR13);
+
+    var FLOR14 = FLOR1.clone();
+    FLOR14.position.set(60, 33, 50);
+    //scene.add(FLOR14);
+
+    var FLOR15 = FLOR1.clone();
+    FLOR15.position.set(-60, 38, 50);
+    //scene.add(FLOR15);
+
+    var FLOR16 = FLOR1.clone();
+    FLOR16.position.set(60, 38, 50);
+    //scene.add(FLOR16);
+
+    var FLOR17 = FLOR1.clone();
+    FLOR17.position.set(-60, 43, 50);
+    //scene.add(FLOR17);
+
+    var FLOR18 = FLOR1.clone();
+    FLOR18.position.set(60, 43, 50);
+    //scene.add(FLOR18);
+
+    var FLOR19 = FLOR1.clone();
+    FLOR19.position.set(-60, 48, 50);
+    //scene.add(FLOR19);
+
+    var FLOR20 = FLOR1.clone();
+    FLOR20.position.set(60, 48, 50);
+    //scene.add(FLOR20);
+
+    var FLOR21 = FLOR1.clone();
+    FLOR21.position.set(-60, 53, 50);
+    //scene.add(FLOR21);
+
+    var FLOR22 = FLOR1.clone();
+    FLOR22.position.set(60, 53, 50);
+    //scene.add(FLOR22);
+    
+    var FLOR23 = FLOR1.clone();
+    FLOR23.position.set(-60, 58, 50);
+    //scene.add(FLOR23);
+
+    var FLOR24 = FLOR1.clone();
+    FLOR24.position.set(60, 58, 50);
+    //scene.add(FLOR24);
+
+    var FLOR25 = FLOR1.clone();
+    FLOR25.position.set(-60, 63, 50);
+    //scene.add(FLOR25);
+
+    var FLOR26 = FLOR1.clone();
+    FLOR26.position.set(60, 63, 50);
+    //scene.add(FLOR26);
+
+    var FLOR27 = FLOR1.clone();
+    FLOR27.position.set(-58, 67, 50);
+    //scene.add(FLOR27);
+
+    var FLOR28 = FLOR1.clone();
+    FLOR28.position.set(58 , 67, 50);
+    //scene.add(FLOR28);
+
+    var FLOR29 = FLOR1.clone();
+    FLOR29.position.set(-55, 71, 50);
+    //scene.add(FLOR29);
+
+    var FLOR30 = FLOR1.clone();
+    FLOR30.position.set(55 , 71, 50);
+    //scene.add(FLOR30);
+
+    var FLOR31 = FLOR1.clone();
+    FLOR31.position.set(-52, 75, 50);
+    //scene.add(FLOR31);
+
+    var FLOR32 = FLOR1.clone();
+    FLOR32.position.set(52 , 75, 50);
+    //scene.add(FLOR32);
+    
+    var FLOR33 = FLOR1.clone();
+    FLOR33.position.set(-47, 78, 50);
+    //scene.add(FLOR33);
+
+    var FLOR34 = FLOR1.clone();
+    FLOR34.position.set(47, 78, 50);
+    //scene.add(FLOR34);
+
+    var FLOR35 = FLOR1.clone();
+    FLOR35.position.set(-43, 81, 50);
+    //scene.add(FLOR35);
+
+    var FLOR36 = FLOR1.clone();
+    FLOR36.position.set(43, 81, 50);
+    //scene.add(FLOR36);
+
+    var FLOR37 = FLOR1.clone();
+    FLOR37.position.set(-38, 81, 50);
+    //scene.add(FLOR37);
+
+    var FLOR38 = FLOR1.clone();
+    FLOR38.position.set(38, 81, 50);
+    //scene.add(FLOR38);
+
+    var FLOR39 = FLOR1.clone();
+    FLOR39.position.set(-33, 81, 50);
+    //scene.add(FLOR39);
+
+    var FLOR40 = FLOR1.clone();
+    FLOR40.position.set(33 , 81, 50);
+    //scene.add(FLOR40);
+
+    var FLOR41 = FLOR1.clone();
+    FLOR41.position.set(-28, 81, 50);
+    //scene.add(FLOR41);
+
+    var FLOR42 = FLOR1.clone();
+    FLOR42.position.set(28 , 81, 50);
+    //scene.add(FLOR42);
+    
+    var FLOR43 = FLOR1.clone();
+    FLOR43.position.set(-23, 81, 50);
+    //scene.add(FLOR43);
+
+    var FLOR44 = FLOR1.clone();
+    FLOR44.position.set(23, 81, 50);
+    //scene.add(FLOR44);
+
+    var FLOR45 = FLOR1.clone();
+    FLOR45.position.set(-18, 81, 50);
+    //scene.add(FLOR45);
+
+    var FLOR46 = FLOR1.clone();
+    FLOR46.position.set(18, 81, 50);
+    //scene.add(FLOR46);
+
+    var FLOR47 = FLOR1.clone();
+    FLOR47.position.set(-13, 81, 50);
+    //scene.add(FLOR47);
+
+    var FLOR48 = FLOR1.clone();
+    FLOR48.position.set(13, 81, 50);
+    //scene.add(FLOR48);
+
+    var FLOR49 = FLOR1.clone();
+    FLOR49.position.set(-8, 81, 50);
+    //scene.add(FLOR39);
+
+    var FLOR50 = FLOR1.clone();
+    FLOR50.position.set(8 , 81, 50);
+    //scene.add(FLOR50);
+
+    var FLOR51 = FLOR1.clone();
+    FLOR51.position.set(-5, 81, 50);
+    //scene.add(FLOR51);
+
+    var FLOR52 = FLOR1.clone();
+    FLOR52.position.set(5 , 81, 50);
+    //scene.add(FLOR52);
+    
+    var FLOR53 = FLOR1.clone();
+    FLOR53.position.set(2, 81, 50);
+    //scene.add(FLOR53);
+
+    var FLOR54 = FLOR1.clone();
+    FLOR54.position.set(2, 81, 50);
+    //scene.add(FLOR54);
+
+
+    //ARCO TERMINADO
+    var ARCO = new THREE.Group()
+    ARCO.add(FLOR0, FLOR1,FLOR2,FLOR3,FLOR4,FLOR5,FLOR6,FLOR7,FLOR8,FLOR9,FLOR10,
+    FLOR11,FLOR12,FLOR13,FLOR14,FLOR15,FLOR16,FLOR17,FLOR18,FLOR19,FLOR20,
+    FLOR21,FLOR22,FLOR23,FLOR24,FLOR25,FLOR26,FLOR27,FLOR28,FLOR29,FLOR30,
+    FLOR31,FLOR32,FLOR33,FLOR34,FLOR35,FLOR36,FLOR37,FLOR38,FLOR39,FLOR40,
+    FLOR41,FLOR42,FLOR43,FLOR44,FLOR45,FLOR46,FLOR47,FLOR48,FLOR49,FLOR50,
+    FLOR51,FLOR52,FLOR53,FLOR54
+    );
+    scene.add(ARCO);
+
+    var arco1=ARCO.clone();
+    arco1.position.set(0,0,40)
+    scene.add(arco1);
+
+    var arco2=ARCO.clone();
+    arco2.position.set(0,0,80)
+    scene.add(arco2);
+
+    var arco3=ARCO.clone();
+    arco3.position.set(0,0,120)
+    scene.add(arco3);
+
+    var arco4=ARCO.clone();
+    arco4.position.set(0,0,160)
+    scene.add(arco4);
+
+    var arco5=ARCO.clone();
+    arco5.position.set(0,0,200);
+    scene.add(arco5);
+
+    var arco6=ARCO.clone();
+    arco6.position.set(0,0,240);
+    scene.add(arco6);
+
+    var arco7=ARCO.clone();
+    arco7.position.set(0,0,280);
+    scene.add(arco7);
+
+
+    //Tumbas
+//Lapidas diseño 1
+    const lapidas1=lapida1({x:0,y:0,z:0 });
+    //scene.add(lapidas1);
+    lapidas1.scale.set(1.5,1.5,1.5);
+
+    var lapid=lapidas1.clone();
+    lapid.position.set(-110,3 ,100);
+    lapid.rotation.set(0,1.57,0);
+    //scene.add(lapid);
+
+    var lapid1=lapidas1.clone();
+    lapid1.position.set(-110,3 ,200);
+    lapid1.rotation.set(0,1.57,0);
+    //scene.add(lapid1);
+
+    var lapid2=lapidas1.clone();
+    lapid2.position.set(110,3 ,100);
+    lapid2.rotation.set(0,-1.57,0);
+    //scene.add(lapid2);
+
+    var lapid3=lapidas1.clone();
+    lapid3.position.set(110,3 ,200);
+    lapid3.rotation.set(0,-1.57,0);
+    //scene.add(lapid3);
+
+
+//LAPIDAS DISEÑO 2
+    const lapi1=lap({x:0,y:0,z:0 });
+    //scene.add(lapi1);
+    lapi1.scale.set(1.5,1.5,1.5);
+
+    var la=lapi1.clone();
+    la.position.set(-110,3 ,150);
+    la.rotation.set(0,1.57,0);
+    //scene.add(la);
+
+    var la1=lapi1.clone();
+    la1.position.set(-110,3 ,250);
+    la1.rotation.set(0,1.57,0);
+    //scene.add(la1);
+
+    var la2=lapi1.clone();
+    la2.position.set(110,3 ,150);
+    la2.rotation.set(0,-1.57,0);
+    //scene.add(la2);
+
+    var la3=lapi1.clone();
+    la3.position.set(110,3 ,250);
+    la3.rotation.set(0,-1.57,0);
+    //scene.add(la3); 
+    
+//LAPIDA 3
+
+    const l11=lip({x:0,y:0,z:0 });
+    //scene.add(lapi1);
+    l11.scale.set(3,3,3); 
+
+    var l=l11.clone();
+    l.position.set(-108,3 ,125);
+    l.rotation.set(0,1.57,0);
+    //scene.add(l);
+
+    var l1=l11.clone();
+    l1.position.set(-108,3 ,175);
+    l1.rotation.set(0,1.57,0);
+    //scene.add(l1);
+
+    var l2=l11.clone();
+    l2.position.set(108,3 ,125);
+    l2.rotation.set(0,-1.57,0);
+    //scene.add(l2);
+
+    var l3=l11.clone();
+    l3.position.set(108,3 ,175);
+    l3.rotation.set(0,-1.57,0);
+    //scene.add(l3);
+    
+    var l4=l11.clone();
+    l4.position.set(108,3,225);
+    l4.rotation.set(0,-1.57,0);
+    //scene.add(l4);
+
+    var l5=l11.clone();
+    l5.position.set(-108,3,225);
+    l5.rotation.set(0,1.57,0);
+    //scene.add(l5);
+
+//Lineas de tumbas
+//IZQUIERDA
+    var LINEAS = new THREE.Group()
+    LINEAS.add(lapid,lapid1,la,la1,l,l1,l5);
+    LINEAS.position.set(0,0,90)
+    scene.add(LINEAS);
+
+    var linea1=LINEAS.clone();
+    linea1.position.set(0,0,-80); 
+    scene.add(linea1);
+    
+    var linea2=LINEAS.clone();
+    linea2.position.set(-60, 0,-80); 
+    scene.add(linea2);
+
+    var linea3=LINEAS.clone();
+    linea3.position.set(-60, 0,90); 
+    scene.add(linea3);
+
+// DERECHA
+
+    var LINEAS1 = new THREE.Group()
+    LINEAS1.add(lapid2,lapid3,la2,la3,l2,l3,l4);
+    LINEAS1.position.set(0,0,90)
+    scene.add(LINEAS1);
+
+    var linea01=LINEAS1.clone();
+    linea01.position.set(0, 0,-80); 
+    //linea01.rotation.set(0,1.57,0);
+    scene.add(linea01);
+    
+    var linea02=LINEAS1.clone();
+    linea02.position.set(60, 0,-80); 
+    scene.add(linea02);
+
+    var linea03=LINEAS1.clone();
+    linea03.position.set(60, 0,90); 
+    scene.add(linea03);
+
+//🎰🎰Rendering y animación
+    requestAnimationFrame(render);
+    function render() {
+
+    //🪄🪄 Animación - 
+
+    //🎮🎮Actualización del OrbitControls para generar la suavidad de movimiento
+    controls.update();
+
+    //Llamado para renderizar y volver a llamar a la misma función (render)
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>
